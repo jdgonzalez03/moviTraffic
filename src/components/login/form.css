@@ -1,0 +1,66 @@
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+label {
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  color: var(--color-text);
+  font-family: var(--font-family);
+  margin-bottom: 5px;
+}
+
+/* Aplicación de estilos a la clase común `form-input` */
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: var(--font-size-paragraph);
+  color: var(--color-text);
+  background-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+/* Estilo para el estado de enfoque (focus) */
+.form-input:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+/* Estilo para los placeholders */
+.form-input::placeholder {
+  color: #999;
+}
+
+.vehicle-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espacio entre campos de vehículos */
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: var(--font-size-paragraph);
+  color: var(--color-text);
+  background-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+.show-password {
+  display: inline;
+  margin-right: 8px;
+}
