@@ -162,8 +162,10 @@ function filterAlerts() {
   align-items: center;
   gap: 16px;
   padding: 20px;
+  padding-bottom: 100px;
   background-color: var(--color-background);
   font-family: var(--font-family);
+  overflow: scroll;
 }
 
 #map {

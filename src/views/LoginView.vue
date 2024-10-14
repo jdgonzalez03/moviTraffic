@@ -38,6 +38,7 @@ const modeLogin = ref('login')
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  z-index: 2;
 }
 
 input[type='radio'] {
