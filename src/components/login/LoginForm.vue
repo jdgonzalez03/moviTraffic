@@ -23,9 +23,12 @@ const handleLogin = async () => {
     console.log('Funciona el login')
     // Asumiendo que el token está en el campo `token` de la respuesta
     console.log(response.data.token)
+    console.log(response.data.user)
 
     const token = response.data.token
+    const user = response.data.user
     localStorage.setItem('token', token) // Guarda el token en localStorage
+    localStorage.setItem('user', JSON.stringify(user))
 
     router.push('/') // Redirecciona al usuario al home
 
