@@ -1,5 +1,11 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+
+const handleSingOut = () => {
+  localStorage.removeItem('user')
+  localStorage.removeItem('token')
+  window.location.reload()
+}
 </script>
 
 <template>
@@ -24,6 +30,10 @@ import { RouterLink, RouterView } from 'vue-router'
     </nav>
   </header>
 
+  <button @click="handleSingOut" class="sing-out">
+    <i class="bi bi-box-arrow-right"></i>
+  </button>
+
   <main class="main">
     <div class="wrapper">
       <h1>Movi<span>Traffic</span></h1>
@@ -33,6 +43,22 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
+.sing-out {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.sing-out i {
+  font-size: var(--font-size-h3);
+}
+
 main {
   height: 100%;
 }
