@@ -20,6 +20,7 @@
 }
 
 .container {
+  overflow: hidden;
   background-color: var(--color-background);
   max-width: 300px;
   text-align: center;
