@@ -4,6 +4,7 @@ body {
   min-height: 100vh;
   font-family: var(--font-family);
   background-color: var(--color-background);
+  color: var(--color-text);
   display: grid;
   place-items: center;
 }
