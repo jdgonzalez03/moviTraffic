@@ -184,8 +184,8 @@ onMounted(() => {
       >
         Buscar
       </button>
-      <p v-if="!restriction">Ingresa una placa</p>
-      <p v-else style="max-width: 300px">
+      <p v-if="!restriction" style="text-align: center">Ingresa una placa</p>
+      <p v-else style="max-width: 300px; text-align: center">
         Tienes pico y placa: {{ restriction }}
       </p>
     </article>
