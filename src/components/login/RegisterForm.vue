@@ -9,7 +9,7 @@ const URL_REGISTER = import.meta.env.VITE_REGISTER_URL
 
 const showPswd = ref(false)
 const hasVehicle = ref('no')
-const vehiclePlates = ref([''])
+const vehiclePlates = ref([{ plate: '', dateSoat: '' }]) // Inicializar como un array de objetos
 
 const fullname = ref('')
 const phone = ref('')
@@ -18,7 +18,7 @@ const password = ref('')
 
 const toggleVehicleFields = () => {
   if (hasVehicle.value === 'yes') {
-    vehiclePlates.value = ['']
+    vehiclePlates.value = [{ plate: '', dateSoat: '' }] // Reiniciar a un objeto vacío
   } else {
     vehiclePlates.value = []
   }
@@ -29,7 +29,7 @@ const handleSubmit = async () => {
     ¿Estás seguro de que deseas enviar los datos? 
       fullname: ${fullname.value},
       phone: ${phone.value},
-      vehicles: ${vehiclePlates.value},
+      vehicles: ${JSON.stringify(vehiclePlates.value)},
       password: ${password.value}
   `)
 
@@ -39,7 +39,7 @@ const handleSubmit = async () => {
         fullname: fullname.value,
         phone: phone.value,
         CC: CC.value,
-        vehiclePlates: vehiclePlates.value,
+        vehiclePlates: vehiclePlates.value, // Enviar el array de objetos
         password: password.value,
       })
 
@@ -51,7 +51,7 @@ const handleSubmit = async () => {
       fullname.value = ''
       phone.value = ''
       CC.value = ''
-      vehiclePlates.value = ''
+      vehiclePlates.value = [{ plate: '', dateSoat: '' }] // Reiniciar a un objeto vacío
       password.value = ''
     } catch (error) {
       console.error('Error al registrar el usuario:', error)
@@ -110,18 +110,28 @@ const handleSubmit = async () => {
     <div v-if="hasVehicle === 'yes'">
       <label for="vehicle-plate">Placas de Vehículos</label>
       <div class="vehicle-inputs">
-        <div v-for="(plate, index) in vehiclePlates" :key="index">
+        <div v-for="(vehicle, index) in vehiclePlates" :key="index">
           <input
             class="form-input"
             type="text"
             :placeholder="`Ingresa la placa del vehículo ${index + 1}`"
-            v-model="vehiclePlates[index]"
+            v-model="vehicle.plate"
             required
             :pattern="'^[A-Z]{3}[0-9]{2,3}[A-Z]?$'"
             title="Formato de placa incorrecto"
           />
+          <label :for="`date-soat-${index}`">Fecha del SOAT</label>
+          <input
+            class="form-input"
+            type="date"
+            v-model="vehicle.dateSoat"
+            required
+          />
         </div>
-        <button class="btn" @click.prevent="vehiclePlates.push('')">
+        <button
+          class="btn"
+          @click.prevent="vehiclePlates.push({ plate: '', dateSoat: '' })"
+        >
           Agregar placa
         </button>
       </div>

@@ -4,16 +4,37 @@ import { getVehicleType } from '@/utils/getVehicleType'
 import imgCarro from '@/assets/carro.png'
 import imgMoto from '@/assets/moto.png'
 import CompaniesSoat from '@/components/home/CompaniesSoat.vue'
+
 // Obtén el usuario del localStorage y asegúrate de que existe
 const user = ref(
   JSON.parse(localStorage.getItem('user')) || {
     fullname: '',
-    vehiclePlate: [],
+    vehiclePlates: [],
   },
 )
 
 // Obtener la lista de vehículos del usuario como una variable reactiva
 const vehicles = ref(user.value.vehiclePlates)
+const vigencia = ref(false)
+
+// Función para calcular los días de vigencia del SOAT
+const calculateSoatValidity = dateSoat => {
+  const today = new Date()
+  const soatDate = new Date(dateSoat)
+  const oneYear = 365 * 24 * 60 * 60 * 1000 // Un año en milisegundos
+
+  // Verifica si la póliza aún es vigente
+  if (today - soatDate < oneYear) {
+    const daysLeft = Math.floor(
+      (soatDate.getTime() + oneYear - today.getTime()) / (1000 * 60 * 60 * 24),
+    )
+    vigencia.value = true
+    return daysLeft > 0 ? daysLeft : 0 // Asegura que no muestre días negativos
+  } else {
+    vigencia.value = false
+    return 0 // Si no está vigente
+  }
+}
 </script>
 
 <template>
@@ -25,23 +46,22 @@ const vehicles = ref(user.value.vehiclePlates)
         <span>{{ user.fullname }}</span>
       </h1>
     </header>
-
+    <h2 style="margin: 0 auto">Vehículos</h2>
     <article>
-      <h2>Vehículos</h2>
-      <!-- TODO: Factorizar componente -->
-      <div class="card" v-for="(plate, index) in vehicles" :key="index">
-        <div :class="getVehicleType(plate)">
+      <div class="card" v-for="(vehicle, index) in vehicles" :key="index">
+        <div :class="getVehicleType(vehicle.plate)">
           <img
-            :src="getVehicleType(plate) === 'moto' ? imgMoto : imgCarro"
+            :src="getVehicleType(vehicle.plate) === 'moto' ? imgMoto : imgCarro"
             alt="Vehicle Image"
           />
-          <p class="plate">{{ plate }}</p>
-          <!-- TODO: Esto es un SLOT -->
-          <p class="soat">Poliza vigente</p>
+          <p class="plate">{{ vehicle.plate }}</p>
+          <p class="soat" v-if="vigencia">Póliza vigente</p>
+          <p class="soat vencido" v-else>Compra seguro</p>
         </div>
-        <!-- TODO: Esto es un SLOT -->
         <div class="time">
-          <h3 class="due-time">270</h3>
+          <h3 class="due-time">
+            {{ calculateSoatValidity(vehicle.dateSoat) }}
+          </h3>
           <p style="text-align: center">Días</p>
         </div>
       </div>
@@ -52,6 +72,9 @@ const vehicles = ref(user.value.vehiclePlates)
 </template>
 
 <style scoped>
+.vencido {
+  color: var(--color-primary);
+}
 /*Home container*/
 .home-container {
   padding: 20px;
@@ -100,6 +123,7 @@ h2 {
 div.moto img,
 div.carro img {
   max-width: 180px;
+  height: 180px;
 }
 
 .home-container {
@@ -171,5 +195,11 @@ span {
   color: var(--color-secondary);
   font-weight: bold;
   font-size: 1.5rem;
+}
+
+@media (min-width: 740px) {
+  article {
+    flex-direction: row;
+  }
 }
 </style>

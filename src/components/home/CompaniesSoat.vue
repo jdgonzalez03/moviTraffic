@@ -3,8 +3,8 @@ import { companiesSoat } from '@/components/home/soatPlaces'
 </script>
 
 <template>
-  <article>
-    <h2>Compañías de Seguro</h2>
+  <h2 style="margin: 0 auto">Compañías de Seguro</h2>
+  <article style="margin: 0 auto">
     <ul>
       <li v-for="companie in companiesSoat" :key="companie.name">
         <img :src="companie.imgScr" :alt="companie.name" />
