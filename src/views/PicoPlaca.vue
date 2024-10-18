@@ -61,12 +61,30 @@ function getVehicleDays(plate) {
 
 // Objeto que contiene la información de cada vehículo del usuario
 const vehiclesWithPicoPlaca = computed(() => {
-  return vehicles.value.map(plate => ({
-    plate,
-    hasPicoPlaca:
-      getVehicleType(plate) === 'carro' && checkPicoPlacaToday(plate),
-    restrictionDays: getVehicleDays(plate),
-  }))
+  return vehicles.value.map(vehicle => {
+    // Verifica que el vehículo y la placa estén definidos
+    if (!vehicle || !vehicle.plate) {
+      console.warn('Vehicle or plate is undefined:', vehicle)
+      return {
+        plate: '', // Devolver un valor por defecto para la placa
+        hasPicoPlaca: false,
+        restrictionDays: '',
+      }
+    }
+
+    // Log de la placa
+    console.log('Vehicle Plate:', vehicle.plate)
+
+    // Determina si el vehículo tiene Pico y Placa
+    const isCar = getVehicleType(vehicle.plate) === 'carro'
+    const hasPicoPlaca = isCar && checkPicoPlacaToday(vehicle.plate)
+
+    return {
+      plate: vehicle.plate, // Retorna la placa del vehículo
+      hasPicoPlaca, // Booleano que indica si tiene restricción
+      restrictionDays: getVehicleDays(vehicle.plate), // Obtiene los días de restricción
+    }
+  })
 })
 
 //handleClickSearchPlaca
@@ -323,6 +341,13 @@ div.carro img {
   100% {
     transform: scale(0.8);
     background-color: var(--color-primary);
+  }
+}
+
+@media (min-width: 740px) {
+  .own-vehicles {
+    display: flex;
+    flex-direction: row;
   }
 }
 </style>
