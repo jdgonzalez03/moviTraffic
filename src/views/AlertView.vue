@@ -9,7 +9,7 @@ const map = ref(null)
 onMounted(() => {
   const apiKey = import.meta.env.VITE_API_KEY_TOMTOM
   const centerCoords = [-73.6185, 4.1412]
-  const initialZoom = 13
+  const initialZoom = 12
 
   var styleBase = 'tomtom://vector/1/'
   var styleS1 = 's1'
@@ -75,7 +75,7 @@ onUnmounted(() => {
 .map-wrapper {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 500px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow:

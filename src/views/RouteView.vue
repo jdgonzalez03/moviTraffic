@@ -63,62 +63,45 @@ const onRouteChange = () => {
 }
 
 const calculateRoute = async () => {
-  if (!selectedRoute.value) {
-    console.error('No se ha seleccionado ninguna ruta')
-    return
-  }
+  // const stops = selectedRoute.value
+  // const locationString = stops.map(stop => `${stop.lng},${stop.lat}`).join(':')
 
-  const stops = selectedRoute.value // Usa las paradas de la ruta seleccionada
+  const stops = selectedRoute.value
+  const locationString = `${stops[0].lng},${stops[0].lat}:${stops[stops.length - 1].lng},${stops[stops.length - 1].lat}`
 
-  try {
-    const response = await services.calculateRoute({
+  services
+    .calculateRoute({
       key: apiKey,
-      locations: stops.map(stop => [stop.lng, stop.lat]),
+      // locations: '-122.510601,37.768014:-122.478468,37.769167',
+      locations: locationString,
     })
+    .go()
+    .then(function (response) {
+      var geojson = response.toGeoJson()
 
-    const geojson = response.toGeoJson()
+      if (map.value.getLayer('route')) {
+        map.value.removeLayer('route')
+        map.value.removeSource('route')
+      }
 
-    if (map.value.getLayer('route')) {
-      map.value.removeLayer('route')
-      map.value.removeSource('route')
-    }
-
-    map.value.addLayer({
-      id: 'route',
-      type: 'line',
-      source: {
-        type: 'geojson',
-        data: geojson,
-      },
-      paint: {
-        'line-color': '#4a90e2',
-        'line-width': 6,
-      },
+      map.value.addLayer({
+        id: 'route',
+        type: 'line',
+        source: {
+          type: 'geojson',
+          data: geojson,
+        },
+        paint: {
+          'line-color': '#4a90e2',
+          'line-width': 8,
+        },
+      })
+      var bounds = new tt.LngLatBounds()
+      geojson.features[0].geometry.coordinates.forEach(function (point) {
+        bounds.extend(tt.LngLat.convert(point))
+      })
+      map.value.fitBounds(bounds, { padding: 20 })
     })
-
-    const bounds = new tt.LngLatBounds()
-    geojson.features[0].geometry.coordinates.forEach(point => {
-      bounds.extend(tt.LngLat.convert(point))
-    })
-    map.value.fitBounds(bounds, { padding: 50 })
-
-    markers.value.forEach(marker => marker.remove())
-    markers.value = []
-
-    stops.forEach((stop, index) => {
-      const element = document.createElement('div')
-      element.className = 'marker'
-      element.innerHTML = index + 1
-
-      const marker = new tt.Marker({ element })
-        .setLngLat(tt.LngLat.convert({ lng: stop.lng, lat: stop.lat }))
-        .addTo(map.value)
-
-      markers.value.push(marker)
-    })
-  } catch (error) {
-    console.error('Error al calcular la ruta:', error)
-  }
 }
 </script>
 

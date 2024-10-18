@@ -45,4 +45,11 @@ export const routes = [
       { lat: 4.162816, lng: -73.663454 }, //Super Gas
     ],
   },
+  {
+    name: 'Villahermosa - Central de abastos',
+    stops: [
+      { lat: 4.144926, lng: -73.63456 },
+      { lat: 4.121552, lng: -73.610832 },
+    ],
+  },
 ]
